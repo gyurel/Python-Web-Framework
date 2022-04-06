@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page_content %}
+<!--Details Page-->
+<section id="detailsPage">
+    <div class="wrapper">
+        <div class="profilePage">
+            {% if profile.profile_image %}
+                <img src="{{ profile.profile_image.url }}" alt="Profile Image">
+            {% else %}
+                <img src="{% static 'images/user.png' %}" alt="Profile Image">
+            {% endif %}
+        </div>
+
+        <div class="profileText">
+            <!-- Profile Info -->
+            {% if profile.full_name %}
+                <h1>Full Name: {{ profile.full_name }}</h1>
+            {% else %}
+                <h1>Full Name:</h1>
+            {% endif %}
+            {% if profile.date_of_birth %}
+                <h1>Date of birth: {{ profile.date_of_birth}}</h1>
+            {% else %}
+                <h1>Date of birth:</h1>
+            {% endif %}
+            {% if profile.age %}
+                <h1>Age: {{ profile.age }}</h1>
+            {% else %}
+                <h1>Age:</h1>
+            {% endif %}
+            {% if profile.gender %}
+                <h1>Gender: {{ profile.gender }}</h1>
+            {% else %}
+                <h1>Gender:</h1>
+            {% endif %}
+            {% if profile.address %}
+                <h1>Address: {{ profile.address }}</h1>
+            {% else %}
+                <h1>Address:</h1>
+            {% endif %}
+            {% if profile.post_code %}
+                <h1>Post code: {{ profile.post_code }}</h1>
+            {% else %}
+                <h1>Post code:</h1>
+            {% endif %}
+            {% if profile.town %}
+                <h1>Town: {{ profile.town }}</h1>
+            {% else %}
+                <h1>Town:</h1>
+            {% endif %}
+{#            <h1>Albums: {{ albums_count }}</h1>#}
+        </div>
+
+        <div class="actionBtn">
+            <!-- Button for Deleting the Profile -->
+            <a href="{% url 'edit profile' profile.pk %}" class="remove">Edit</a>
+{#            <a href="" class="remove">Delete</a>#}
+        </div>
+
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block page_content %}
+<!--Home Page-->
+<div class="container-inline">
+    <section id="welcomePage">
+        <div id="welcome-message">
+            <h1>Welcome to BEST</h1>
+            <h1>My Online Parfume Shop!</h1>
+        </div>
+        <div class="music-img">
+            <img src="{% static '/images/commercial.jpg' %}" alt="music-icon">
+        </div>
+    </section>
+
+    <!-- Registration -->
+    <section id="registerPage">
+        <form action="{% url 'register user' %}" method="POST">
+            <fieldset>
+                <legend>Register to proceed</legend>
+{#                <h1>Register to proceed</h1>#}
+                <div class="container">
+    {#                <legend>Profile</legend>#}
+    {#                <!-- Form for Registration -->#}
+    {#                <label for="username">Username:</label>#}
+    {#                <input id="username" name="username" type="text" placeholder="Username">#}
+    {##}
+    {#                <label for="email">Email:</label>#}
+    {#                <input id="email" name="email" type="email" placeholder="Email">#}
+    {##}
+    {#                <label for="age">Age:</label>#}
+    {#                <input id="age" name="age" type="number" min="0" placeholder="Age">#}
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <!-- Button to Create Profile -->
+                    <button type="submit" class="register">Register</button>
+                </div>
+            </fieldset>
+        </form>
+    </section>
+</div>
+{% endblock %}

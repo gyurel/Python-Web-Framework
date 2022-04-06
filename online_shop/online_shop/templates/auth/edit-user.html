@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block page_content %}
+<!-- Delete Profile Page-->
+<section id="detailsPage">
+    <div class="wrapper2">
+        <div class="profileText">
+
+            <!-- Delete Profile Form -->
+            <h1>Please fill out all fields below to change your password!</h1>
+            <form action="{% url 'edit user' user.pk %}" method="POST">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <!-- Confirm Button -->
+                <button class="delete-profile" type="submit">Submit</button>
+            </form>
+            <!-- End Delete Profile Form -->
+        </div>
+    </div>
+</section>
+{% endblock %}

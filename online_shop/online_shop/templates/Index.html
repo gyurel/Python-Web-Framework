@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page_content %}
+<!-- Catalog with Albums-->
+<section id="catalogPage">
+
+    <!--  If No albums in catalog -->
+
+    <!-- If albums in catalog -->
+    {% if products_list %}
+        <h1>All Products</h1>
+        <h1>All Products</h1>
+    {% else %}
+        <p>No Parfumes in Catalog!</p>
+    {% endif %}
+    <!-- First Card-Box in catalog -->
+    {% for product in products_list %}
+        <div class="card-box">
+            <img src="{{ product.product_image.url }}" alt="Cover Image">
+            <div>
+                <div class="text-center">
+                    <p class="name">Name: {{ product.name}}</p>
+                    <p class="artist">Category: {{ product.category}}</p>
+                    <p class="genre">Price: ${{ product.price }}</p>
+                    <p class="price">Price: ${{ product.price }}</p>
+                </div>
+                <div class="btn-group">
+                    <a href="">Add to Card</a>
+                    <a href="">Add to Favorites</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    <!-- End First Card-Box in catalog -->
+
+{#    <!-- Second Card-Box in catalog -->#}
+{#    <div class="card-box">#}
+{#        <img src="/static/images/pinkFloyd.jpg">#}
+{#        <div>#}
+{#            <div class="text-center">#}
+{#                <p class="name">Name: The Dark Side of the Moon</p>#}
+{#                <p class="artist">Artist: Pink Floyd</p>#}
+{#                <p class="genre">Genre: Rock Music</p>#}
+{#                <p class="price">Price: $28.75</p>#}
+{#            </div>#}
+{#            <div class="btn-group">#}
+{#                <a href="#">Details</a>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#    <!-- End Second Card-Box in catalog -->#}
+{##}
+{#    <!-- Third Card-Box in catalog -->#}
+{#    <div class="card-box">#}
+{#        <img src="/static/images/Lorde.jpg">#}
+{#        <div>#}
+{#            <div class="text-center">#}
+{#                <p class="name">Name: Melodrama</p>#}
+{#                <p class="artist">Artist: Lorde</p>#}
+{#                <p class="genre">Genre: Pop Music</p>#}
+{#                <p class="price">Price: $7.33</p>#}
+{#            </div>#}
+{#            <div class="btn-group">#}
+{#                <a href="#">Details</a>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#    <!-- End Third Card-Box in catalog -->#}
+
+</section>
+{% endblock %}

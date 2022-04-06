@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block page_content %}
+<!-- Delete Profile Page-->
+<section id="detailsPage">
+    <div class="wrapper2">
+        <div class="profileText">
+
+            <!-- Delete Profile Form -->
+            <h1>Are you sure that you want to delete your profile permanently!</h1>
+            <h5>All your information will be lost!</h5>
+            <form action="{% url 'delete user' user.pk %}" method="POST">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <!-- Confirm Button -->
+{#                <a class="delete-profile" href="{% url 'profile details' user.pk %}" role="button">Back to Profile</a>#}
+                <button class="delete-profile" type="submit">Delete Permanently</button>
+            </form>
+            <!-- End Delete Profile Form -->
+        </div>
+    </div>
+</section>
+{% endblock %}
