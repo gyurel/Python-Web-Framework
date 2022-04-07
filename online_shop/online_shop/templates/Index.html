@@ -8,8 +8,7 @@
 
     <!-- If albums in catalog -->
     {% if products_list %}
-        <h1>All Products</h1>
-        <h1>All Products</h1>
+        <h1>Catalogue</h1>
     {% else %}
         <p>No Parfumes in Catalog!</p>
     {% endif %}
@@ -24,9 +23,10 @@
                     <p class="genre">Price: ${{ product.price }}</p>
                     <p class="price">Price: ${{ product.price }}</p>
                 </div>
-                <div class="btn-group">
+                <div class="button" align="center">
                     <a href="">Add to Card</a>
-                    <a href="">Add to Favorites</a>
+                    <a>&</a>
+                    <a href="" >Add to Favorites</a>
                 </div>
             </div>
         </div>

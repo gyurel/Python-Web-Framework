@@ -218,8 +218,24 @@ class Cart(models.Model):
         )
     )
 
-    product = models.OneToOneField(
+    product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
-        primary_key=True,
+    )
+
+    user = models.ForeignKey(
+        AppUser,
+        on_delete=models.CASCADE,
+    )
+
+
+class Favorites(models.Model):
+    user_id = models.ForeignKey(
+        AppUser,
+        on_delete=models.CASCADE,
+    )
+
+    product_id = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
     )
