@@ -40,10 +40,10 @@
 {#                    <li><a href="{% url 'add album' %}">Create Album</a></li>#}
                     <li><a href="">About</a></li>
                     <li><a href="">Contact</a></li>
-                    <li><a href="">Cart</a></li>
+                    <li><a href="{% url 'user cart' user.pk %}">Cart</a></li>
                     <li><a href="{% url 'profile details' user.pk %}">Profile</a></li>
                 {% elif '/profile/edit' in request.path  %}
-                    <li><a href="">Cart</a></li>
+                    <li><a href="{% url 'user cart' user.pk %}">Cart</a></li>
                     <li><a href="{% url 'profile details' user.pk %}">Profile</a></li>
                 {% elif '/user/delete/' in request.path %}
                     <li><a href="{% url 'profile details' user.pk %}">Back to Profile</a></li>

@@ -10,7 +10,7 @@
     {% if products_list %}
         <h1>Catalogue</h1>
     {% else %}
-        <p>No Parfumes in Catalog!</p>
+        <p>No Products in Catalog!</p>
     {% endif %}
     <!-- First Card-Box in catalog -->
     {% for product in products_list %}
@@ -24,7 +24,7 @@
                     <p class="price">Price: ${{ product.price }}</p>
                 </div>
                 <div class="button" align="center">
-                    <a href="">Add to Card</a>
+                    <a href="{% url 'add to card' product.pk %}">Add to Card</a>
                     <a>&</a>
                     <a href="" >Add to Favorites</a>
                 </div>

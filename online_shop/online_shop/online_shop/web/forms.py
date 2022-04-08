@@ -1,6 +1,7 @@
 from django import forms
 
-from online_shop.web.models import Profile
+from online_shop.auth_app.models import AppUser
+from online_shop.web.models import Profile, Cart
 
 
 class EditProfileForm(forms.ModelForm):
@@ -60,3 +61,9 @@ class EditProfileForm(forms.ModelForm):
                 }
             ),
         }
+
+
+# class AddToCardForm(forms.ModelForm):
+#     class Meta:
+#         model = Cart
+#         fields = '__all__'
