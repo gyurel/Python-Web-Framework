@@ -90,11 +90,20 @@ input[type=text]:focus, input[type=number]:focus, input[type=email]:focus {
     padding: 5em 0 10em;
 }
 
+#checkoutCart {
+    position: static;
+    float: right;
+    font-family: "Arial Narrow", serif;
+    font-size: 16px;
+    color: #aab2bd;
+    padding: 5em 0 10em;
+}
+
 #loginPage {
     font-family: "Arial Narrow", serif;
     font-size: 16px;
     color: #aab2bd;
-    padding: 5em 0 0em;
+    padding: 5em 0 0;
 }
 
 * {

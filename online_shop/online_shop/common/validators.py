@@ -27,9 +27,9 @@ class MaxFileSizeInMbValidator:
             raise ValidationError("Max file size is %sMB" % str(self.max_size))
 
 
-def age_less_than_zero(value):
+def value_less_than_zero(value):
     if value < 0:
-        raise ValidationError('Value must be greater than zero')
+        raise ValidationError('Value must be greater than zero!')
 
 
 def age_greater_than_120(value):

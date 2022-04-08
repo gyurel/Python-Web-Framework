@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from online_shop.web.models import Profile, Product, Storage, Cart
+from online_shop.web.models import Profile, Product, Storage, Cart, Favorites
 
 
 @admin.register(Profile)
@@ -17,9 +17,14 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(Storage)
 class StorageAdmin(admin.ModelAdmin):
-    list_display = ('quantity',)
+    list_display = ('product', 'quantity',)
 
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
-    list_display = ('quantity',)
+    list_display = ('user', 'product', 'quantity',)
+
+
+@admin.register(Favorites)
+class CartAdmin(admin.ModelAdmin):
+    list_display = ('user', 'product',)

@@ -41,12 +41,18 @@
                     <li><a href="">About</a></li>
                     <li><a href="">Contact</a></li>
                     <li><a href="{% url 'user cart' user.pk %}">Cart</a></li>
+                    <li><a href="{% url 'user favorites' user.pk %}">Favorites</a></li>
                     <li><a href="{% url 'profile details' user.pk %}">Profile</a></li>
                 {% elif '/profile/edit' in request.path  %}
                     <li><a href="{% url 'user cart' user.pk %}">Cart</a></li>
                     <li><a href="{% url 'profile details' user.pk %}">Profile</a></li>
                 {% elif '/user/delete/' in request.path %}
                     <li><a href="{% url 'profile details' user.pk %}">Back to Profile</a></li>
+                {% elif '/user-cart/' in request.path %}
+                    <li><a href="">Checkout</a></li>
+                    <li><a href="{% url 'user favorites' user.pk %}">Favorites</a></li>
+                {% elif '/user-favorites/' in request.path %}
+                    <li><a href="{% url 'user cart' user.pk %}">Cart</a></li>
                 {% elif request.path == '/register/' %}
                     <li><a href="">About</a></li>
                     <a class="register" href="{% url 'login user' %}" role="button">Login</a>

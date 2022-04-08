@@ -2,7 +2,7 @@ from django.db import models
 import datetime
 
 from common.validators import min_length_validator, validate_only_letters, MaxFileSizeInMbValidator, \
-    age_greater_than_120, age_less_than_zero, MinDateValidator, MaxDateValidator
+    age_greater_than_120, MinDateValidator, MaxDateValidator
 from django.core import validators
 from online_shop.auth_app.models import AppUser
 from online_shop.settings import STATICFILES_DIRS, MEDIA_ROOT, BASE_DIR, STATIC_URL
@@ -204,7 +204,7 @@ class Storage(models.Model):
 
 
 class Cart(models.Model):
-    DEFAULT_QUANTITY = 0
+    DEFAULT_QUANTITY = 1
     MIN_QUANTITY = 0
     MIN_MESSAGE = 'The quantity can not be less than zero!'
     CHOICES = [(x, x) for x in range(0, 11)]
@@ -230,12 +230,12 @@ class Cart(models.Model):
 
 
 class Favorites(models.Model):
-    user_id = models.ForeignKey(
+    user = models.ForeignKey(
         AppUser,
         on_delete=models.CASCADE,
     )
 
-    product_id = models.ForeignKey(
+    product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
     )
