@@ -49,7 +49,7 @@
                 {% elif '/user/delete/' in request.path %}
                     <li><a href="{% url 'profile details' user.pk %}">Back to Profile</a></li>
                 {% elif '/user-cart/' in request.path %}
-                    <li><a href="">Checkout</a></li>
+                    <li><a href="{% url 'user checkout' user.pk %}">Checkout</a></li>
                     <li><a href="{% url 'user favorites' user.pk %}">Favorites</a></li>
                 {% elif '/user-favorites/' in request.path %}
                     <li><a href="{% url 'user cart' user.pk %}">Cart</a></li>
@@ -63,6 +63,8 @@
                     <a class="register" href="{% url 'edit user' profile.pk %}" role="button">User Options</a>
                 {% elif '/user/edit/' in request.path %}
                     <a class="register" href="{% url 'delete user' user.pk %}" role="button">Delete User</a>
+                {% elif '/user/checkout/' in request.path %}
+                    <li><a href="{% url 'user cart' user.pk %}">Back to Cart</a></li>
                 {% endif %}
             </ul>
         </nav>

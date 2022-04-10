@@ -4,7 +4,7 @@
     margin-left: 94px;
     background-position: right 35% bottom 45%;
     box-sizing: border-box;
-    border-radius: 15px;
+    border-radius: 7px;
     float: left;
     height: 490px;
     color: #f5dffc;
@@ -71,7 +71,7 @@
     display: block;
     height: 230px;
     width: 260px;
-    border-radius: 15px;
+    border-radius: 7px;
 
 }
 
@@ -192,6 +192,17 @@ input[type=text]:hover {
     text-align: left;
     margin-top: 30px;
     font-size: 26px;
+    font-family: 'Arial Narrow', serif;
+    text-shadow: 5px 2px black;
+}
+
+#checkoutPage h1{
+    padding-top: 100px;
+    color: rgba(255, 255, 255, 0.63);
+    text-align: center;
+    margin-top: 8px;
+    margin-bottom: 6px;
+    font-size: 36px;
     font-family: 'Arial Narrow', serif;
     text-shadow: 5px 2px black;
 }

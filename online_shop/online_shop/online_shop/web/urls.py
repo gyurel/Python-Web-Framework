@@ -3,7 +3,7 @@ from django.conf.urls.static import static
 from django.urls import path
 
 from online_shop.web.views import IndexView, ProfileDetails, EditProfile, add_to_card_view, CartView, FavoritesView, \
-    add_to_favorites_view, add_one_to_articul, subtract_one_from_articul, delete_cart_articul
+    add_to_favorites_view, add_one_to_articul, subtract_one_from_articul, delete_cart_articul, CheckOutView
 
 urlpatterns = [
     path('', IndexView.as_view(), name='home page'),
@@ -19,5 +19,7 @@ urlpatterns = [
     path('add/one-to/articul/<int:pk>/', add_one_to_articul, name='add one to articul'),
     path('subtract/one-from/articul/<int:pk>/', subtract_one_from_articul, name='subtract one from articul'),
     path('delete/articul/<int:pk>/', delete_cart_articul, name=' delete cart articul'),
+
+    path('user/checkout/<int:pk>/', CheckOutView.as_view(), name='user checkout'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

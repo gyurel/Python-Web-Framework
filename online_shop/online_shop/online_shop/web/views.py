@@ -68,6 +68,7 @@ class CartView(views.ListView):
     template_name = 'cart.html'
     context_object_name = 'cart'
 
+
     def get(self, request, *args, **kwargs):
         self.object_list = self.get_queryset().filter(user_id=request.user.id).order_by('id')
         allow_empty = self.get_allow_empty()
@@ -155,3 +156,76 @@ def delete_cart_articul(request, pk):
     articul.delete()
 
     return redirect('user cart', pk=pk)
+
+
+class CheckOutView(views.ListView):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    model = Cart
+    template_name = 'checkout.html'
+    context_object_name = 'cart'
+
+    @property
+    def cart_subtotal(self):
+        subtotal = 0
+        for obj in self.object_list:
+            subtotal += (obj.product.price * obj.quantity)
+        return subtotal
+
+    @property
+    def cart_total(self):
+        subtotal = self.cart_subtotal
+        total = subtotal + 10
+        return total
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        """Get the context for this view."""
+        queryset = object_list if object_list is not None else self.object_list
+        page_size = self.get_paginate_by(queryset)
+        context_object_name = self.get_context_object_name(queryset)
+        if page_size:
+            paginator, page, queryset, is_paginated = self.paginate_queryset(
+                queryset, page_size
+            )
+            context = {
+                "paginator": paginator,
+                "page_obj": page,
+                "is_paginated": is_paginated,
+                "object_list": queryset,
+                "subtotal": self.cart_subtotal,
+                "total": self.cart_total,
+
+            }
+        else:
+            context = {
+                "paginator": None,
+                "page_obj": None,
+                "is_paginated": False,
+                "object_list": queryset,
+                "subtotal": self.cart_subtotal,
+                "total": self.cart_total,
+            }
+        if context_object_name is not None:
+            context[context_object_name] = queryset
+        context.update(kwargs)
+        return super().get_context_data(**context)
+
+    def get(self, request, *args, **kwargs):
+        self.object_list = self.get_queryset().filter(user_id=request.user.id).order_by('id')
+        allow_empty = self.get_allow_empty()
+
+        if not allow_empty:
+            # When pagination is enabled and object_list is a queryset,
+            # it's better to do a cheap query than to load the unpaginated
+            # queryset in memory.
+            if self.get_paginate_by(self.object_list) is not None and hasattr(
+                self.object_list, "exists"
+            ):
+                is_empty = not self.object_list.exists()
+            else:
+                is_empty = not self.object_list
+            if is_empty:
+                raise Http404('Empty list')
+        context = self.get_context_data()
+        return self.render_to_response(context)
