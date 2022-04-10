@@ -1,13 +1,13 @@
 from django.contrib.auth import get_user
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
-from django.shortcuts import redirect, render
-from django.urls import reverse_lazy, reverse
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
 from django.views import generic as views
 
 # Create your views here.
 from online_shop.web.forms import EditProfileForm
-from online_shop.web.models import Profile, Product, Cart, Favorites
+from online_shop.web.models import Profile, Product, Cart, Favorites, Storage
 
 
 class IndexView(LoginRequiredMixin, views.ListView):
@@ -59,6 +59,9 @@ def add_to_card_view(request, pk):
                 return redirect('home page')
 
     cart.objects.create(product=current_product, user=user)
+    storage_of_articul = Storage.objects.get(pk=current_product.id)
+    storage_of_articul.quantity -= 1
+    storage_of_articul.save()
 
     return redirect('home page')
 
@@ -67,7 +70,6 @@ class CartView(views.ListView):
     model = Cart
     template_name = 'cart.html'
     context_object_name = 'cart'
-
 
     def get(self, request, *args, **kwargs):
         self.object_list = self.get_queryset().filter(user_id=request.user.id).order_by('id')
@@ -135,24 +137,36 @@ def add_to_favorites_view(request, pk):
 
 
 def add_one_to_articul(request, pk):
+    # form = AddOneToArticul
     articul = Cart.objects.get(pk=pk)
-    articul.quantity += 1
-    articul.save()
+    storage_of_articul = Storage.objects.get(pk=articul.product.id)
+    if storage_of_articul.quantity > 0:
+        storage_of_articul.quantity -= 1
+        articul.quantity += 1
+        articul.save()
+        storage_of_articul.save()
 
     return redirect('user cart', pk=pk)
 
 
 def subtract_one_from_articul(request, pk):
     articul = Cart.objects.get(pk=pk)
-    if articul.quantity > 0:
-        articul.quantity -= 1
-        articul.save()
+    storage_of_articul = Storage.objects.get(pk=articul.product.id)
+
+    storage_of_articul.quantity += 1
+    articul.quantity -= 1
+    articul.save()
+    storage_of_articul.save()
 
     return redirect('user cart', pk=pk)
 
 
 def delete_cart_articul(request, pk):
     articul = Cart.objects.get(pk=pk)
+    storage_of_articul = Storage.objects.get(pk=articul.product.id)
+
+    storage_of_articul.quantity += articul.quantity
+    storage_of_articul.save()
     articul.delete()
 
     return redirect('user cart', pk=pk)
@@ -193,8 +207,8 @@ class CheckOutView(views.ListView):
                 "page_obj": page,
                 "is_paginated": is_paginated,
                 "object_list": queryset,
-                "subtotal": self.cart_subtotal,
-                "total": self.cart_total,
+                "subtotal": self.cart_subtotal,  #Custom inserted form me
+                "total": self.cart_total,  #Custom inserted form me
 
             }
         else:
@@ -203,8 +217,8 @@ class CheckOutView(views.ListView):
                 "page_obj": None,
                 "is_paginated": False,
                 "object_list": queryset,
-                "subtotal": self.cart_subtotal,
-                "total": self.cart_total,
+                "subtotal": self.cart_subtotal,  #Custom inserted form me
+                "total": self.cart_total,  #Custom inserted form me
             }
         if context_object_name is not None:
             context[context_object_name] = queryset

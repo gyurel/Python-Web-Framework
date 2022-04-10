@@ -10,8 +10,14 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name', 'age',)
 
 
+class StorageInlineAdmin(admin.StackedInline):
+    model = Storage
+
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
+    inlines = (StorageInlineAdmin,)
+
     list_display = ('name', 'category', 'price',)
 
 

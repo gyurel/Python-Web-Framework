@@ -182,6 +182,9 @@ class Product(models.Model):
         blank=True,
     )
 
+    def __str__(self):
+        return f'{self.name}'
+
 
 class Storage(models.Model):
     DEFAULT_PRODUCT_QUANTITY = 0
