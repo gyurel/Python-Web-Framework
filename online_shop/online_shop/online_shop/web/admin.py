@@ -1,13 +1,17 @@
 from django.contrib import admin
+from django.contrib.auth.models import Group
 
 # Register your models here.
 
 from online_shop.web.models import Profile, Product, Storage, Cart, Favorites
 
+admin.site.site_header = 'BEST Parfume Shop Administration'
+
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'age',)
+    list_display = ('first_name', 'last_name', 'gender', 'age',)
+    list_filter = ('gender',)
 
 
 class StorageInlineAdmin(admin.StackedInline):
@@ -29,8 +33,10 @@ class StorageAdmin(admin.ModelAdmin):
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
     list_display = ('user', 'product', 'quantity',)
+    list_filter = ('user',)
 
 
 @admin.register(Favorites)
 class CartAdmin(admin.ModelAdmin):
     list_display = ('user', 'product',)
+    list_filter = ('user',)

@@ -20,6 +20,12 @@ class UserRegistrationView(views.CreateView):
     template_name = 'auth/register.html'
     success_url = reverse_lazy('home page')
 
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('home page')
+        self.object = None
+        return super().get(request, *args, **kwargs)
+
     def form_valid(self, *args, **kwargs):
         result = super().form_valid(*args, **kwargs)
         # user => self.object
@@ -32,11 +38,11 @@ class UserLoginView(auth_views.LoginView):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    # def get(self, request, *args, **kwargs):
-    #     """Handle GET requests: instantiate a blank version of the form."""
-    #     if not request.user.is_authenticated:
-    #         return self.render_to_response(self.get_context_data())
-    #     return reverse_lazy('home page')
+    def get(self, request, *args, **kwargs):
+        """Handle GET requests: instantiate a blank version of the form."""
+        if request.user.is_authenticated:
+            return redirect('home page')
+        return self.render_to_response(self.get_context_data())
 
     template_name = 'auth/login.html'
 
