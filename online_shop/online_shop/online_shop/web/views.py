@@ -18,65 +18,13 @@ class IndexView(LoginRequiredMixin, views.ListView):
     context_object_name = 'products_list'
     ordering = ['id']
 
-    # def get(self, request, *args, **kwargs):
-    #     self.object_list = self.get_queryset().order_by('id')
-    #     allow_empty = self.get_allow_empty()
-    #
-    #     if not allow_empty:
-    #         # When pagination is enabled and object_list is a queryset,
-    #         # it's better to do a cheap query than to load the unpaginated
-    #         # queryset in memory.
-    #         if self.get_paginate_by(self.object_list) is not None and hasattr(
-    #             self.object_list, "exists"
-    #         ):
-    #             is_empty = not self.object_list.exists()
-    #         else:
-    #             is_empty = not self.object_list
-    #         if is_empty:
-    #             raise Http404('Empty list')
-    #     context = self.get_context_data()
-    #     return self.render_to_response(context)
-
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
         context['storage'] = Storage.objects.all()
         return context
 
-    # def get_context_data(self, *, object_list=None, **kwargs):
-    #     """Get the context for this view."""
-    #     storage = Storage.objects.all()
-    #     queryset = object_list if object_list is not None else self.object_list
-    #     page_size = self.get_paginate_by(queryset)
-    #     context_object_name = self.get_context_object_name(queryset)
-    #     if page_size:
-    #         paginator, page, queryset, is_paginated = self.paginate_queryset(
-    #             queryset, page_size
-    #         )
-    #         context = {
-    #             "paginator": paginator,
-    #             "page_obj": page,
-    #             "is_paginated": is_paginated,
-    #             "object_list": queryset,
-    #             "storage": storage,  # Custom inserted form me
-    #             # "total": self.cart_total,  # Custom inserted form me
-    #
-    #         }
-    #     else:
-    #         context = {
-    #             "paginator": None,
-    #             "page_obj": None,
-    #             "is_paginated": False,
-    #             "object_list": queryset,
-    #             "storage": storage,  # Custom inserted form me
-    #             # "total": self.cart_total,  # Custom inserted form me
-    #         }
-    #     if context_object_name is not None:
-    #         context[context_object_name] = queryset
-    #     context.update(kwargs)
-    #     return super().get_context_data(**context)
 
-
-class ProfileDetails(views.DetailView):
+class ProfileDetails(LoginRequiredMixin, views.DetailView):
     model = Profile
     context_object_name = 'profile'
     template_name = 'profile-details.html'
@@ -92,7 +40,7 @@ class ProfileDetails(views.DetailView):
         return context
 
 
-class EditProfile(views.UpdateView):
+class EditProfile(LoginRequiredMixin, views.UpdateView):
     model = Profile
     template_name = 'profile-edit.html'
     form_class = EditProfileForm
@@ -103,6 +51,9 @@ class EditProfile(views.UpdateView):
 
 
 def add_to_cart_view(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('home page')
+
     current_product = Product.objects.get(pk=pk)
     # products = Product.objects.all()
     user = get_user(request)
@@ -125,7 +76,7 @@ def add_to_cart_view(request, pk):
     return redirect('home page')
 
 
-class CartView(views.ListView):
+class CartView(LoginRequiredMixin, views.ListView):
     model = Cart
     template_name = 'cart.html'
     context_object_name = 'cart'
@@ -150,7 +101,7 @@ class CartView(views.ListView):
         return self.render_to_response(context)
 
 
-class FavoritesView(views.ListView):
+class FavoritesView(LoginRequiredMixin, views.ListView):
     model = Favorites
     template_name = 'favorites.html'
     context_object_name = 'favorites'
@@ -176,6 +127,9 @@ class FavoritesView(views.ListView):
 
 
 def add_to_favorites_view(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('home page')
+
     current_product = Product.objects.get(pk=pk)
     # products = Product.objects.all()
     user = get_user(request)
@@ -196,6 +150,9 @@ def add_to_favorites_view(request, pk):
 
 
 def remove_product_from_favorites_view(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('home page')
+
     favorit_product = Favorites.objects.get(pk=pk)
     favorit_product.delete()
 
@@ -203,6 +160,9 @@ def remove_product_from_favorites_view(request, pk):
 
 
 def add_one_to_articul(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('home page')
+
     # form = AddOneToArticul
     articul = Cart.objects.get(pk=pk)
     storage_of_articul = Storage.objects.get(pk=articul.product.id)
@@ -216,6 +176,9 @@ def add_one_to_articul(request, pk):
 
 
 def subtract_one_from_articul(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('home page')
+
     articul = Cart.objects.get(pk=pk)
     storage_of_articul = Storage.objects.get(pk=articul.product.id)
 
@@ -228,6 +191,9 @@ def subtract_one_from_articul(request, pk):
 
 
 def delete_cart_articul(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('home page')
+
     articul = Cart.objects.get(pk=pk)
     storage_of_articul = Storage.objects.get(pk=articul.product.id)
 
@@ -238,7 +204,7 @@ def delete_cart_articul(request, pk):
     return redirect('user cart', pk=pk)
 
 
-class CheckOutView(views.ListView):
+class CheckOutView(LoginRequiredMixin, views.ListView):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -312,9 +278,20 @@ class CheckOutView(views.ListView):
 
 
 def pay_view(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('home page')
+
     user_cart = Cart.objects.all().filter(user_id=pk)
 
     for article in user_cart:
         article.delete()
 
     return redirect('user cart', pk=pk)
+
+
+class AboutView(views.TemplateView):
+    template_name = 'about.html'
+
+
+class ContactView(views.TemplateView):
+    template_name = 'contact.html'

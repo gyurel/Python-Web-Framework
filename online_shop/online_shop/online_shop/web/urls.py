@@ -4,7 +4,7 @@ from django.urls import path
 
 from online_shop.web.views import IndexView, ProfileDetails, EditProfile, add_to_cart_view, CartView, FavoritesView, \
     add_to_favorites_view, add_one_to_articul, subtract_one_from_articul, delete_cart_articul, CheckOutView, \
-    remove_product_from_favorites_view, pay_view
+    remove_product_from_favorites_view, pay_view, AboutView, ContactView
 
 urlpatterns = [
     path('', IndexView.as_view(), name='home page'),
@@ -24,5 +24,8 @@ urlpatterns = [
 
     path('user/checkout/<int:pk>/', CheckOutView.as_view(), name='user checkout'),
     path('user/pay/<int:pk>/', pay_view, name='user pay'),
+
+    path('about/', AboutView.as_view(), name='about page'),
+    path('contact/', ContactView.as_view(), name='contact page'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
