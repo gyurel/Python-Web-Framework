@@ -7,30 +7,52 @@
     <!--  If No albums in catalog -->
 
     <!-- If albums in catalog -->
-    {% if products_list %}
+    {% if page_obj %}
         <h1>Catalogue</h1>
     {% else %}
         <p>No Products in Catalog!</p>
     {% endif %}
     <!-- First Card-Box in catalog -->
-    {% for product in products_list %}
-        <div class="card-box">
-            <img src="{{ product.product_image.url }}" alt="Cover Image">
-            <div>
-                <div class="text-center">
-                    <p class="name">Name: {{ product.name}}</p>
-                    <p class="artist">Category: {{ product.category}}</p>
-                    <p class="genre">Price: ${{ product.price }}</p>
-                    <p class="price">Price: ${{ product.price }}</p>
-                </div>
-                <div class="button" align="center">
-                    <a href="{% url 'add to card' product.pk %}">Add to Card</a>
-                    <a>&</a>
-                    <a href="{% url 'add to favorites' product.pk %}" >Add to Favorites</a>
+{#    {% for product in products_list %}#}
+    {% for product in page_obj %}
+        {% for stor in storage %}
+        {% if product.pk == stor.product_id %}
+            <div class="card-box">
+                <img src="{{ product.product_image.url }}" alt="Cover Image">
+                <div>
+                    <div class="text-center">
+                        <p class="name">Name: {{ product.name}}</p>
+                        <p class="artist">Category: {{ product.category}}</p>
+                        <p class="genre">Price: ${{ product.price }}</p>
+                        <p class="price">Available stocks: {{ stor.quantity }}pcs</p>
+                    </div>
+                    <div class="button" align="center">
+                        <a href="{% url 'add to card' product.pk %}">Add to Card</a>
+                        <a>&</a>
+                        <a href="{% url 'add to favorites' product.pk %}" >Add to Favorites</a>
+                    </div>
                 </div>
             </div>
-        </div>
+        {% endif %}
+        {% endfor %}
     {% endfor %}
+    <div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
     <!-- End First Card-Box in catalog -->
 
 {#    <!-- Second Card-Box in catalog -->#}

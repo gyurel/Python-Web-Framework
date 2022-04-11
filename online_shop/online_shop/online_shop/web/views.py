@@ -11,10 +11,69 @@ from online_shop.web.models import Profile, Product, Cart, Favorites, Storage
 
 
 class IndexView(LoginRequiredMixin, views.ListView):
+    paginate_by = 8
     model = Product
     template_name = 'index.html'
     # queryset = 'products_list'
     context_object_name = 'products_list'
+    ordering = ['id']
+
+    # def get(self, request, *args, **kwargs):
+    #     self.object_list = self.get_queryset().order_by('id')
+    #     allow_empty = self.get_allow_empty()
+    #
+    #     if not allow_empty:
+    #         # When pagination is enabled and object_list is a queryset,
+    #         # it's better to do a cheap query than to load the unpaginated
+    #         # queryset in memory.
+    #         if self.get_paginate_by(self.object_list) is not None and hasattr(
+    #             self.object_list, "exists"
+    #         ):
+    #             is_empty = not self.object_list.exists()
+    #         else:
+    #             is_empty = not self.object_list
+    #         if is_empty:
+    #             raise Http404('Empty list')
+    #     context = self.get_context_data()
+    #     return self.render_to_response(context)
+
+    def get_context_data(self, **kwargs):
+        context = super(IndexView, self).get_context_data(**kwargs)
+        context['storage'] = Storage.objects.all()
+        return context
+
+    # def get_context_data(self, *, object_list=None, **kwargs):
+    #     """Get the context for this view."""
+    #     storage = Storage.objects.all()
+    #     queryset = object_list if object_list is not None else self.object_list
+    #     page_size = self.get_paginate_by(queryset)
+    #     context_object_name = self.get_context_object_name(queryset)
+    #     if page_size:
+    #         paginator, page, queryset, is_paginated = self.paginate_queryset(
+    #             queryset, page_size
+    #         )
+    #         context = {
+    #             "paginator": paginator,
+    #             "page_obj": page,
+    #             "is_paginated": is_paginated,
+    #             "object_list": queryset,
+    #             "storage": storage,  # Custom inserted form me
+    #             # "total": self.cart_total,  # Custom inserted form me
+    #
+    #         }
+    #     else:
+    #         context = {
+    #             "paginator": None,
+    #             "page_obj": None,
+    #             "is_paginated": False,
+    #             "object_list": queryset,
+    #             "storage": storage,  # Custom inserted form me
+    #             # "total": self.cart_total,  # Custom inserted form me
+    #         }
+    #     if context_object_name is not None:
+    #         context[context_object_name] = queryset
+    #     context.update(kwargs)
+    #     return super().get_context_data(**context)
 
 
 class ProfileDetails(views.DetailView):
@@ -43,7 +102,7 @@ class EditProfile(views.UpdateView):
         return reverse_lazy('profile details', kwargs={'pk': self.object.pk})
 
 
-def add_to_card_view(request, pk):
+def add_to_cart_view(request, pk):
     current_product = Product.objects.get(pk=pk)
     # products = Product.objects.all()
     user = get_user(request)
@@ -134,6 +193,13 @@ def add_to_favorites_view(request, pk):
     model.objects.create(product=current_product, user=user)
 
     return redirect('home page')
+
+
+def remove_product_from_favorites_view(request, pk):
+    favorit_product = Favorites.objects.get(pk=pk)
+    favorit_product.delete()
+
+    return redirect('user favorites', pk=request.user.id)
 
 
 def add_one_to_articul(request, pk):
@@ -243,3 +309,12 @@ class CheckOutView(views.ListView):
                 raise Http404('Empty list')
         context = self.get_context_data()
         return self.render_to_response(context)
+
+
+def pay_view(request, pk):
+    user_cart = Cart.objects.all().filter(user_id=pk)
+
+    for article in user_cart:
+        article.delete()
+
+    return redirect('user cart', pk=pk)
