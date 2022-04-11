@@ -1,11 +1,9 @@
-# from django.shortcuts import render
-from django.contrib.auth import login, get_user_model
+from django.contrib.auth import login
 from django.contrib.auth import views as auth_views
-from django.http import HttpResponseRedirect
+
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 
-# from common.helpers import NotLoggedRequiredMixin
 from online_shop.auth_app.forms import UserRegistrationForm, EditUserForm, DeleteUserForm
 from django.views import generic as views
 
@@ -38,13 +36,13 @@ class UserLoginView(auth_views.LoginView):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+    template_name = 'auth/login.html'
+
     def get(self, request, *args, **kwargs):
         """Handle GET requests: instantiate a blank version of the form."""
         if request.user.is_authenticated:
             return redirect('home page')
         return self.render_to_response(self.get_context_data())
-
-    template_name = 'auth/login.html'
 
     def get_success_url(self):
         next = self.request.GET.get('next', None)
