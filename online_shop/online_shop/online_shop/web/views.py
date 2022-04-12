@@ -10,7 +10,7 @@ from online_shop.web.forms import EditProfileForm
 from online_shop.web.models import Profile, Product, Cart, Favorites, Storage
 
 
-class IndexView(LoginRequiredMixin, views.ListView):
+class IndexView(LoginRequiredMixin, views.ListView):  # Should be tested!
     paginate_by = 8
     model = Product
     template_name = 'index.html'
@@ -20,37 +20,69 @@ class IndexView(LoginRequiredMixin, views.ListView):
 
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
-        context['storage'] = Storage.objects.all()
+        context['storage'] = Storage.objects.all()  # My custom logic here!
         return context
 
 
-class ProfileDetails(LoginRequiredMixin, views.DetailView):
+class ProfileDetailsView(LoginRequiredMixin, views.DetailView):  # Should be tested!
     model = Profile
     context_object_name = 'profile'
     template_name = 'profile-details.html'
 
-    def get_context_data(self, **kwargs):
-        """Insert the single object into the context dict."""
-        context = super().get_context_data(**kwargs)
-        if self.object:
-            context["profile"] = self.object
-            if self.context_object_name:
-                context[self.context_object_name] = self.object
-        context.update(kwargs)
-        return context
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.pk != self.kwargs['pk']:  # My custom logic here!
+            return redirect('home page')
+
+        response = super().dispatch(request, *args, **kwargs)
+
+        return response
 
 
-class EditProfile(LoginRequiredMixin, views.UpdateView):
+class EditProfileView(LoginRequiredMixin, views.UpdateView):  # Should be tested!
     model = Profile
     template_name = 'profile-edit.html'
     form_class = EditProfileForm
     # success_url = reverse_lazy('home page')
 
-    def get_success_url(self):
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.pk != self.kwargs['pk']:  # My custom logic here!
+            return redirect('home page')
+
+        response = super().dispatch(request, *args, **kwargs)
+
+        return response
+
+    def get_success_url(self):  # My custom logic here!
         return reverse_lazy('profile details', kwargs={'pk': self.object.pk})
 
 
+class CartView(LoginRequiredMixin, views.ListView):  # Should be tested!
+    model = Cart
+    template_name = 'cart.html'
+    context_object_name = 'cart'
+
+    def get(self, request, *args, **kwargs):
+        self.object_list = self.get_queryset().filter(user_id=request.user.id).order_by('id')
+        allow_empty = self.get_allow_empty()
+
+        if not allow_empty:
+            # When pagination is enabled and object_list is a queryset,
+            # it's better to do a cheap query than to load the unpaginated
+            # queryset in memory.
+            if self.get_paginate_by(self.object_list) is not None and hasattr(
+                self.object_list, "exists"
+            ):
+                is_empty = not self.object_list.exists()
+            else:
+                is_empty = not self.object_list
+            if is_empty:
+                raise Http404('Empty list')
+        context = self.get_context_data()
+        return self.render_to_response(context)
+
+
 def add_to_cart_view(request, pk):
+
     if not request.user.is_authenticated:
         return redirect('home page')
 
@@ -76,29 +108,49 @@ def add_to_cart_view(request, pk):
     return redirect('home page')
 
 
-class CartView(LoginRequiredMixin, views.ListView):
-    model = Cart
-    template_name = 'cart.html'
-    context_object_name = 'cart'
+def add_one_to_articul_in_cart_view(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('home page')
 
-    def get(self, request, *args, **kwargs):
-        self.object_list = self.get_queryset().filter(user_id=request.user.id).order_by('id')
-        allow_empty = self.get_allow_empty()
+    # form = AddOneToArticul
+    articul = Cart.objects.get(pk=pk)
+    storage_of_articul = Storage.objects.get(pk=articul.product.id)
+    if storage_of_articul.quantity > 0:
+        storage_of_articul.quantity -= 1
+        articul.quantity += 1
+        articul.save()
+        storage_of_articul.save()
 
-        if not allow_empty:
-            # When pagination is enabled and object_list is a queryset,
-            # it's better to do a cheap query than to load the unpaginated
-            # queryset in memory.
-            if self.get_paginate_by(self.object_list) is not None and hasattr(
-                self.object_list, "exists"
-            ):
-                is_empty = not self.object_list.exists()
-            else:
-                is_empty = not self.object_list
-            if is_empty:
-                raise Http404('Empty list')
-        context = self.get_context_data()
-        return self.render_to_response(context)
+    return redirect('user cart', pk=pk)
+
+
+def subtract_one_from_articul_in_cart_view(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('home page')
+
+    articul = Cart.objects.get(pk=pk)
+    storage_of_articul = Storage.objects.get(pk=articul.product.id)
+
+    storage_of_articul.quantity += 1
+    articul.quantity -= 1
+    articul.save()
+    storage_of_articul.save()
+
+    return redirect('user cart', pk=pk)
+
+
+def delete_cart_articul_view(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('home page')
+
+    articul = Cart.objects.get(pk=pk)
+    storage_of_articul = Storage.objects.get(pk=articul.product.id)
+
+    storage_of_articul.quantity += articul.quantity
+    storage_of_articul.save()
+    articul.delete()
+
+    return redirect('user cart', pk=pk)
 
 
 class FavoritesView(LoginRequiredMixin, views.ListView):
@@ -157,51 +209,6 @@ def remove_product_from_favorites_view(request, pk):
     favorit_product.delete()
 
     return redirect('user favorites', pk=request.user.id)
-
-
-def add_one_to_articul(request, pk):
-    if not request.user.is_authenticated:
-        return redirect('home page')
-
-    # form = AddOneToArticul
-    articul = Cart.objects.get(pk=pk)
-    storage_of_articul = Storage.objects.get(pk=articul.product.id)
-    if storage_of_articul.quantity > 0:
-        storage_of_articul.quantity -= 1
-        articul.quantity += 1
-        articul.save()
-        storage_of_articul.save()
-
-    return redirect('user cart', pk=pk)
-
-
-def subtract_one_from_articul(request, pk):
-    if not request.user.is_authenticated:
-        return redirect('home page')
-
-    articul = Cart.objects.get(pk=pk)
-    storage_of_articul = Storage.objects.get(pk=articul.product.id)
-
-    storage_of_articul.quantity += 1
-    articul.quantity -= 1
-    articul.save()
-    storage_of_articul.save()
-
-    return redirect('user cart', pk=pk)
-
-
-def delete_cart_articul(request, pk):
-    if not request.user.is_authenticated:
-        return redirect('home page')
-
-    articul = Cart.objects.get(pk=pk)
-    storage_of_articul = Storage.objects.get(pk=articul.product.id)
-
-    storage_of_articul.quantity += articul.quantity
-    storage_of_articul.save()
-    articul.delete()
-
-    return redirect('user cart', pk=pk)
 
 
 class CheckOutView(LoginRequiredMixin, views.ListView):

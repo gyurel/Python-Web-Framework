@@ -18,9 +18,12 @@ from django.urls import reverse_lazy, reverse
 #             field.widget.attrs['class'] += ' form-control'
 
 
-# class NotLoggedRequiredMixin:
-#     """Verify that the current user is not authenticated."""
+# class CustomNoPermissionMixin:
+#     def dispatch(request, *args, **kwargs):
+#         if request.user.pk != kwargs['pk']:
+#             return redirect('home page')
 #
-#     def test_func(self, request):
-#         if request.method == 'GET' and request.user.is_authenticated:
-#             return HttpResponseRedirect('home page')
+#         response = super().dispatch(request, *args, **kwargs)
+#
+#         return response
+#
