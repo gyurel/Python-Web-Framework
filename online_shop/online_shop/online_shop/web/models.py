@@ -2,10 +2,10 @@ from django.db import models
 import datetime
 
 from common.validators import min_length_validator, validate_only_letters, MaxFileSizeInMbValidator, \
-    age_greater_than_120, MinDateValidator, MaxDateValidator
+    MinDateValidator, MaxDateValidator
 from django.core import validators
 from online_shop.auth_app.models import AppUser
-from online_shop.settings import STATICFILES_DIRS, MEDIA_ROOT, BASE_DIR, STATIC_URL
+from online_shop.settings import MEDIA_ROOT
 
 
 # Create your models here.
@@ -107,7 +107,6 @@ class Profile(models.Model):
     )
 
     profile_image = models.ImageField(
-        # default=f'{BASE_DIR / STATIC_URL}\\images\\user.png',
         null=True,
         upload_to=PROFILE_IMAGE_UPLOAD_DIR,
         validators=(

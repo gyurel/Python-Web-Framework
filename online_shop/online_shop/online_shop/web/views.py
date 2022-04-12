@@ -14,7 +14,6 @@ class IndexView(LoginRequiredMixin, views.ListView):  # Should be tested!
     paginate_by = 8
     model = Product
     template_name = 'index.html'
-    # queryset = 'products_list'
     context_object_name = 'products_list'
     ordering = ['id']
 
