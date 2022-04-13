@@ -77,19 +77,19 @@ class IndexViewTests(TestCase):
 
     def test_if_gets_the_storage_data_in_context(self):
         user, profile, product, storage, cart, favorites = self.__create_valid_user_and_profile()
-        expected_storage = Storage.objects.all()
-        expected_products = Product.objects.all()
+        expected_storage = Storage.objects.all().get()
+        expected_products = Product.objects.all().get()
 
         self.client.login(**self.VALID_USER_CREDENTIALS)
 
         response = self.client.get(reverse_lazy('home page'))
 
-        storage = response.context['storage']
-        products = response.context['products_list']
+        context_storage = response.context['storage'].get()
+        context_products = response.context['products_list'].get()
 
         # Check for actual profiles
-        self.assertEqual(expected_storage, storage)
-        self.assertEqual(expected_products, products)
+        self.assertEqual(expected_storage, context_storage)
+        self.assertEqual(expected_products, context_products)
 
 
     def test_if_redirects_to_login_if_user_not_logged_in(self):
