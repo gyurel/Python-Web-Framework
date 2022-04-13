@@ -48,13 +48,14 @@
 
 .albumCover img {
     border-radius: 7px 0px 0px 7px;
-    height: 389px;
+    height: 400px;
+    width: 320px;
 }
 
 .profilePage img {
-    border-radius: 12px 0 0 7px;
-    height: 389px;
-    width: 280px;
+    border-radius: 7px 0 0 7px;
+    height: 400px;
+    width: 330px;
 }
 
 .albumText, .profileText {

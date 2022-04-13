@@ -41,7 +41,6 @@ class EditProfileView(LoginRequiredMixin, views.UpdateView):  # Should be tested
     model = Profile
     template_name = 'profile-edit.html'
     form_class = EditProfileForm
-    # success_url = reverse_lazy('home page')
 
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.pk != self.kwargs['pk']:  # My custom logic here!
@@ -82,18 +81,14 @@ class CartView(LoginRequiredMixin, views.ListView):  # Should be tested!
 
 def add_to_cart_view(request, pk):
 
-    if not request.user.is_authenticated:
+    if not request.user.is_authenticated: # Should be made to decorator!
         return redirect('home page')
 
     current_product = Product.objects.get(pk=pk)
-    # products = Product.objects.all()
     user = get_user(request)
     cart = Cart
     articules = Cart.objects.all()
-    # cart.product = product.pk
-    # cart.user = user.pk
 
-    # for product in products:
     for articul in articules:
         if articul.user_id == user.id:
             if articul.product_id == current_product.id:
