@@ -20,7 +20,7 @@ urlpatterns = [
 
     path('add/one-to/articul/<int:pk>/', add_one_to_articul_in_cart_view, name='add one to articul'),
     path('subtract/one-from/articul/<int:pk>/', subtract_one_from_articul_in_cart_view, name='subtract one from articul'),
-    path('delete/articul/<int:pk>/', delete_cart_articul_view, name=' delete cart articul'),
+    path('delete/articul/<int:pk>/', delete_cart_articul_view, name='delete cart articul'),
 
     path('user/checkout/<int:pk>/', CheckOutView.as_view(), name='user checkout'),
     path('user/pay/<int:pk>/', pay_view, name='user pay'),

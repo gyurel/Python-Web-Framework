@@ -133,7 +133,7 @@ def subtract_one_from_articul_in_cart_view(request, pk):
     return redirect('user cart', pk=pk)
 
 
-def delete_cart_articul_view(request, pk):
+def delete_cart_articul_view(request, pk):  # Not tested
     if not request.user.is_authenticated:
         return redirect('home page')
 
@@ -172,7 +172,7 @@ class FavoritesView(LoginRequiredMixin, views.ListView):
         return self.render_to_response(context)
 
 
-def add_to_favorites_view(request, pk):
+def add_to_favorites_view(request, pk):  # Not tested
     if not request.user.is_authenticated:
         return redirect('home page')
 
@@ -195,7 +195,7 @@ def add_to_favorites_view(request, pk):
     return redirect('home page')
 
 
-def remove_product_from_favorites_view(request, pk):
+def remove_product_from_favorites_view(request, pk):  # Not tested
     if not request.user.is_authenticated:
         return redirect('home page')
 
