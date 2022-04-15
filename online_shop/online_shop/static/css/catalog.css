@@ -71,7 +71,7 @@
     display: block;
     height: 230px;
     width: 260px;
-    border-radius: 7px;
+    border-radius: 7px 7px 0px 0px;
 
 }
 
