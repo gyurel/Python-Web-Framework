@@ -671,3 +671,21 @@ class ContactViewTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.template_name[0], 'contact.html')
+
+
+class PayView(TestCase):
+    def test_view_redirects_home_if_anonymous_user(self):
+        user, profile, product, storage, cart, favorites = create_valid_user_profile_product_storage_cart_favorites()
+
+        response = self.client.get(reverse('user pay', kwargs={'pk': user.id}))
+
+        self.assertEqual(302, response.status_code)
+
+    def test_view_redirects_to_cart_if_user_authenticated(self):
+        user, profile, product, storage, cart, favorites = create_valid_user_profile_product_storage_cart_favorites()
+
+        self.client.login(**VALID_USER_CREDENTIALS)
+
+        response = self.client.get(reverse('user pay', kwargs={'pk': user.id}))
+
+        self.assertEqual(302, response.status_code)

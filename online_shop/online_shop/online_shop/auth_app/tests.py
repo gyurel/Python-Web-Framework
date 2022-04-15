@@ -3,15 +3,11 @@ from django.contrib.auth.models import AnonymousUser
 from django.test import TestCase, Client, RequestFactory
 
 # Create your tests here.
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 
-from online_shop.auth_app.forms import UserRegistrationForm
-from online_shop.auth_app.models import AppUser
 from online_shop.auth_app.views import UserRegistrationView, UserLoginView, EditUserView
 from online_shop.web.models import Profile, Storage, Product, Cart, Favorites
 from online_shop.web.tests import create_user, create_valid_user_profile_product_storage_cart_favorites
-from online_shop.web.views import FavoritesView, CheckOutView, AboutView, ContactView
-
 
 # Create your tests here.
 UserModel = get_user_model()
@@ -83,6 +79,7 @@ class UserRegistrationViewTests(TestCase):
         self.client.login(**VALID_USER_CREDENTIALS)
         response = UserRegistrationView.as_view()(request)
         self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('home page'))
 
     def test_if_view_grants_access_when_there_is_an_anonymous_user_and_renders_correct_template(self):
         request = self.factory.get('register user')
