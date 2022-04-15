@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page_content %}
+<!-- Catalog with Albums-->
+<section id="catalogPage">
+
+    <!--  If No albums in catalog -->
+
+    <!-- If albums in catalog -->
+    <p>404 Page Not Found!</p>
+    <h1>404 Page Not Found!</h1>
+
+{#      <section id="checkoutCart">#}
+{#            <fieldset>#}
+{#                <legend>Cart Total</legend>#}
+{#                <h1>Register to proceed</h1>#}
+{#                <div class="container">#}
+{#                    <legend>Profile</legend>#}
+{#                    <!-- Form for Registration -->#}
+{#                    <label for="username"> Subtotal:</label>#}
+{#                    <input id="username" name="username" type="text" placeholder="Subtotal">#}
+{##}
+{#                    <label for="email">Delivery:</label>#}
+{#                    <input id="email" name="email" type="email" placeholder="Delivery">#}
+{##}
+{#                    <label for="age">Total:</label>#}
+{#                    <input id="age" name="age" type="number" min="0" placeholder="Total to pay">#}
+{##}
+{#                    <!-- Button to Create Profile -->#}
+{#                    <button type="submit" class="register">Pay</button>#}
+{#                </div>#}
+{#            </fieldset>#}
+{#        </section>#}
+    <!-- First Card-Box in catalog -->
+{#    {% for article in cart %}#}
+{#        {% if article.user_id == user.pk %}#}
+{#        <div class="card-box">#}
+{#            <img src="{{ article.product.product_image.url }}" alt="Cover Image">#}
+{#            <div>#}
+{#                <div class="text-center">#}
+{#                    <p class="name">Name: {{ article.product.name}}</p>#}
+{#                    <p class="artist">Category: {{ article.product.category}}</p>#}
+{#                    <p class="genre">Price: ${{ article.product.price }}</p>#}
+{#                    <p class="price">Quantity: {{ article.quantity }}</p>#}
+{#                </div>#}
+{#                <div class="button" align="center">#}
+{#                    <a href="{% url 'add one to articul' article.pk %}">+</a>#}
+{#                    <a>&</a>#}
+{#                    <a href="{% url 'subtract one from articul' article.pk %}" >-</a>#}
+{#                    <a>&</a>#}
+{#                    <a href="{% url 'delete cart articul' article.pk %}" >Delete</a>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#        {% endif %}#}
+{#    {% endfor %}#}
+{##}
+{#    <!-- End First Card-Box in catalog -->#}
+{##}
+{#    <!-- Second Card-Box in catalog -->#}
+{#    <div class="card-box">#}
+{#        <img src="/static/images/pinkFloyd.jpg">#}
+{#        <div>#}
+{#            <div class="text-center">#}
+{#                <p class="name">Name: The Dark Side of the Moon</p>#}
+{#                <p class="artist">Artist: Pink Floyd</p>#}
+{#                <p class="genre">Genre: Rock Music</p>#}
+{#                <p class="price">Price: $28.75</p>#}
+{#            </div>#}
+{#            <div class="btn-group">#}
+{#                <a href="#">Details</a>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#    <!-- End Second Card-Box in catalog -->#}
+{##}
+{#    <!-- Third Card-Box in catalog -->#}
+{#    <div class="card-box">#}
+{#        <img src="/static/images/Lorde.jpg">#}
+{#        <div>#}
+{#            <div class="text-center">#}
+{#                <p class="name">Name: Melodrama</p>#}
+{#                <p class="artist">Artist: Lorde</p>#}
+{#                <p class="genre">Genre: Pop Music</p>#}
+{#                <p class="price">Price: $7.33</p>#}
+{#            </div>#}
+{#            <div class="btn-group">#}
+{#                <a href="#">Details</a>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#    <!-- End Third Card-Box in catalog -->#}
+
+</section>
+{% endblock %}

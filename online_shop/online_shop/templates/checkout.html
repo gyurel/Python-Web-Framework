@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page_content %}
+<!--Details Page-->
+<section id="checkoutPage">
+    <h1>Please Pay to Check Out!</h1>
+    <div>
+         <section id="checkoutCart">
+            <form action="{% url 'user pay' user.pk %}" method="POST">
+                <fieldset>
+                    <legend>Cart Total</legend>
+{#                    <h1>Register to proceed</h1>#}
+                    <div class="container">
+{#                        <legend>Cart Total</legend>#}
+                        <!-- Form for Registration -->
+                        <label for="username"> Subtotal:</label>
+                        <input id="username" name="username" value="{{ subtotal }}" type="number" placeholder="Subtotal">
+
+                        <label for="email">Delivery:</label>
+                        <input id="email" name="email" value="$10" type="text" placeholder="Delivery">
+
+                        <label for="age">Total:</label>
+                        <input id="age" name="age" value="{{ total }}"type="number" min="0" placeholder="Total to pay">
+
+                        <!-- Button to Create Profile -->
+                        <button type="submit" class="register">Pay</button>
+                    </div>
+                </fieldset>
+                {% csrf_token %}
+            </form>
+        </section>
+    </div>
+    <div class="wrapper3">
+
+        <div class="albumCover">
+            <!-- Album Image -->
+            <img src="{% static 'images/checkout-image.jpg' %}" alt="Cover Image">
+        </div>
+
+        <div class="albumInfo">
+
+            <div class="albumText">
+                <!-- Album Info -->
+                <p>Be sure</p>
+                <p>that you</p>
+                <p>have all</p>
+                <p>products</p>
+                <p>you wish</p>
+                <p>in cart!</p>
+            </div>
+
+{#            <div class="actionBtn">#}
+{#                <!-- Album Buttons -->#}
+{#                <a href="{% url 'edit album' album.id %}" class="edit">Edit</a>#}
+{#                <a href="{% url 'delete album' album.id %}" class="remove">Delete</a>#}
+{#            </div>#}
+        </div>
+    </div>
+</section>
+{% endblock %}

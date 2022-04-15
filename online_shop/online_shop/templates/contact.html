@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page_content %}
+<!--Details Page-->
+<section id="detailsPage">
+    <h2>Please Find Our Contact Information Below</h2>
+    <div class="wrapper">
+        <div class="profilePage">
+            <img src="{% static 'images/contact.png' %}" alt="Profile Image">
+        </div>
+
+        <div class="profileText">
+            <h1>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspBEST Parfumes Ltd.</h1>
+            <h1>Address: &nbsp&nbsp&nbspFifth Avenue 25</h1>
+            <h1>Location: &nbsp&nbsp&nbspNew York{{ profile.date_of_birth}}</h1>
+            <h1>Telephone: &nbsp&nbsp+01 850 635 542</h1>
+            <h1>Email: &nbsp&nbsp&nbsp&nbsp&nbsp&nbspcontact@best.parfumes.com</h1>
+            <h1>Web: &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspwww.bestparfumes.com</h1>
+            <h1>Facebook: &nbsp&nbsp@bestparfumes.com</h1>
+            <h1>Tweeter: &nbsp&nbsp&nbsp&nbsp@bestparfumes</h1>
+
+{#            <h1>Gender: {{ profile.gender }}</h1>#}
+{#            <h1>Gender:</h1>#}
+{#            <h1>Address: {{ profile.address }}</h1>#}
+{#            <h1>Address:</h1>#}
+{#            <h1>Post code: {{ profile.post_code }}</h1>#}
+{#            <h1>Post code:</h1>#}
+{#            <h1>Town: {{ profile.town }}</h1>#}
+{#            <h1>Town:</h1>#}
+{#            <h1>Albums: {{ albums_count }}</h1>#}
+        </div>
+    </div>
+</section>
+{% endblock %}

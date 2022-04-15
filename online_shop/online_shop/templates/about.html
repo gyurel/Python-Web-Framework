@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page_content %}
+<!--Details Page-->
+<section id="detailsPage">
+    <h2>This is How The Jurney Started</h2>
+    <div class="wrapper">
+        <div class="profilePage">
+            <img src="{% static 'images/about-image.jpg' %}" alt="Profile Image">
+        </div>
+
+        <div class="profileText">
+            <!-- Profile Info -->
+            <p> BEST Parfumes started in 2006 and mainly focus on the import and distribution of niche perfumes, men shaving and scented candles. Our aim was to offer online a small international brand.</p>
+            <p>We are, Liesbeth Rameckers and Robert Helmer, owners of The Scent Company. We met in 1985, while we were both working for the Levi Strauss Jeans Company in Amsterdam.</p>
+            <p>Robert was visual merchandiser in this world of intelligent marketing and modern franchise, Liesbeth was product manager and later product communication manager. Robert then branches out in the health food, homeopathy and phytotherapy field, and later he started importing perfume brands.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
