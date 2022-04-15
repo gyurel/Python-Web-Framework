@@ -425,6 +425,93 @@ class FavoritesViewTests(TestCase):
         response = FavoritesView.as_view()(request)
         self.assertEqual(response.context_data['favorites'].first(), expected_favorites)
 
+
+class AddToFavoritesViewTests(TestCase):
+
+    def test_view_redirects_home_if_anonymous_user(self):
+        user, profile, product, storage, cart, favorites = create_valid_user_profile_product_storage_cart_favorites()
+
+        response = self.client.get(reverse('add to favorites', kwargs={'pk': product.id}))
+
+        self.assertEqual(302, response.status_code)
+
+    # def test_view_redirects_when_articul_already_in_cart(self):
+    #     user, profile, product, storage, cart, favorites = create_valid_user_profile_product_storage_cart_favorites()
+    #
+    #     self.client.login(**VALID_USER_CREDENTIALS)
+    #
+    #     response = self.client.get(reverse('add to favorites', kwargs={'pk': product.id}))
+    #
+    #     self.assertEqual(302, response.status_code)
+
+    def test_view_adds_articul_in_cart_when_it_is_not_already_added(self):
+        user, profile, product, storage, cart, favorites = create_valid_user_profile_product_storage_cart_favorites()
+
+        NEW_PRODUCT_DATA = {
+            'name': 'NewProduct',
+            'product_image': 'new_image',
+            'category': 'man',
+        }
+
+        new_product = Product.objects.create(**NEW_PRODUCT_DATA)
+        # new_storage = Storage.objects.create(quantity=10, product=new_product)
+
+        self.client.login(**VALID_USER_CREDENTIALS)
+
+        response = self.client.get(reverse('add to favorites', kwargs={'pk': new_product.id}))
+
+        # favorites = Favorites.objects.all()
+        new_favorit = Favorites.objects.all().get(pk=new_product.id)
+
+        self.assertEqual(new_product.id, new_favorit.product.id)
+        self.assertEqual(302, response.status_code) # redirects home page after success
+
+    def test_view_redirects_home_when_product_already_added_to_cart(self):
+        user, profile, product, storage, cart, favorites = create_valid_user_profile_product_storage_cart_favorites()
+
+        new_product = Product.objects.get(pk=product.id)
+        # new_storage = Storage.objects.create(quantity=10, product=new_product)
+
+        self.client.login(**VALID_USER_CREDENTIALS)
+
+        response = self.client.get(reverse('add to favorites', kwargs={'pk': new_product.id}))
+
+        self.assertEqual(302, response.status_code)
+
+
+class RemoveArticulFromFavoritesView(TestCase):
+    def test_view_redirects_home_if_anonymous_user(self):
+        user, profile, product, storage, cart, favorites = create_valid_user_profile_product_storage_cart_favorites()
+
+        response = self.client.get(reverse('remove favorit', kwargs={'pk': product.id}))
+
+        self.assertEqual(302, response.status_code)
+
+    def test_view_removes_the_articul(self):
+        user, profile, product, storage, cart, favorites = create_valid_user_profile_product_storage_cart_favorites()
+        VALID_SECOND_PRODUCT_DATA = {
+            'name': 'Product2',
+            'product_image': 'image2',
+            'category': 'unisex',
+            'price': 11,
+        }
+
+        second_product = Product.objects.create(**VALID_SECOND_PRODUCT_DATA)
+        # second_storage = Storage.objects.create(quantity=5, product=second_product)
+        Favorites.objects.create(product=second_product, user=user)
+
+        expected_favorit = Favorites.objects.first()
+
+        self.client.login(**VALID_USER_CREDENTIALS)
+
+        response = self.client.get(reverse('remove favorit', kwargs={'pk': second_product.id}))
+
+        real_favorit = Favorites.objects.get()
+
+        self.assertEqual(302, response.status_code)
+        self.assertEqual(expected_favorit, real_favorit)
+
+
 class CheckoutViewTests(TestCase):
     def setUp(self) -> None:
         self.factory = RequestFactory()
