@@ -1,19 +1,14 @@
 from django.contrib.auth import login
 from django.contrib.auth import views as auth_views
-
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
-
 from online_shop.auth_app.forms import UserRegistrationForm, EditUserForm, DeleteUserForm
 from django.views import generic as views
-
-
-# Create your views here.
 from online_shop.auth_app.models import AppUser
 
 
 class UserRegistrationView(views.CreateView):
-    # form_class = auth_forms.UserCreationForm #this is the standard django form
+
     form_class = UserRegistrationForm  # This is my custom form
     template_name = 'auth/register.html'
     success_url = reverse_lazy('home page')
@@ -68,20 +63,6 @@ class EditUserView(auth_views.PasswordChangeView):
 
 class SuccessfullyEditedUser(auth_views.PasswordChangeDoneView):
     template_name = 'auth/successfully-changed-user.html'
-
-#
-# class DeleteUserView(views.DeleteView):
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#
-#     # def get_queryset(self):
-#     #     return super().get_queryset().prefetch_related()
-#
-#     model = get_user_model()
-#     # user = AppUser.objects.get(pk=pk)
-#     form_class = DeleteUserForm
-#     template_name = 'auth/delete-user.html'
-#     success_url = reverse_lazy('home page')
 
 
 def delete_user_view(request, pk):
