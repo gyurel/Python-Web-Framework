@@ -10,7 +10,7 @@ from online_shop.web.forms import EditProfileForm
 from online_shop.web.models import Profile, Product, Cart, Favorites, Storage
 
 
-class IndexView(LoginRequiredMixin, views.ListView):  # Should be tested!
+class IndexView(LoginRequiredMixin, views.ListView):
     paginate_by = 8
     model = Product
     template_name = 'index.html'
@@ -23,7 +23,7 @@ class IndexView(LoginRequiredMixin, views.ListView):  # Should be tested!
         return context
 
 
-class ProfileDetailsView(LoginRequiredMixin, views.DetailView):  # Should be tested!
+class ProfileDetailsView(LoginRequiredMixin, views.DetailView):
     model = Profile
     context_object_name = 'profile'
     template_name = 'profile-details.html'
@@ -37,7 +37,7 @@ class ProfileDetailsView(LoginRequiredMixin, views.DetailView):  # Should be tes
         return response
 
 
-class EditProfileView(LoginRequiredMixin, views.UpdateView):  # Should be tested!
+class EditProfileView(LoginRequiredMixin, views.UpdateView):
     model = Profile
     template_name = 'profile-edit.html'
     form_class = EditProfileForm
@@ -54,7 +54,7 @@ class EditProfileView(LoginRequiredMixin, views.UpdateView):  # Should be tested
         return reverse_lazy('profile details', kwargs={'pk': self.object.pk})
 
 
-class CartView(LoginRequiredMixin, views.ListView):  # Should be tested!
+class CartView(LoginRequiredMixin, views.ListView):
     model = Cart
     template_name = 'cart.html'
     context_object_name = 'cart'
@@ -133,7 +133,7 @@ def subtract_one_from_articul_in_cart_view(request, pk):
     return redirect('user cart', pk=pk)
 
 
-def delete_cart_articul_view(request, pk):  # Not tested
+def delete_cart_articul_view(request, pk):
     if not request.user.is_authenticated:
         return redirect('home page')
 
@@ -172,7 +172,7 @@ class FavoritesView(LoginRequiredMixin, views.ListView):
         return self.render_to_response(context)
 
 
-def add_to_favorites_view(request, pk):  # Not tested
+def add_to_favorites_view(request, pk):
     if not request.user.is_authenticated:
         return redirect('home page')
 
@@ -195,7 +195,7 @@ def add_to_favorites_view(request, pk):  # Not tested
     return redirect('home page')
 
 
-def remove_product_from_favorites_view(request, pk):  # Not tested
+def remove_product_from_favorites_view(request, pk):
     if not request.user.is_authenticated:
         return redirect('home page')
 
