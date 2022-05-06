@@ -19,10 +19,47 @@ class UserRegistrationView(views.CreateView):
         self.object = None
         return super().get(request, *args, **kwargs)
 
+    def render_to_response(self, context, **response_kwargs):
+        """
+        Return a response, using the `response_class` for this view, with a
+        template rendered with the given context.
+
+        Pass response_kwargs to the constructor of the response class.
+        """
+        response_kwargs.setdefault("content_type", self.content_type)
+
+        for _, field in context['form'].fields.items():
+            if _ == 'email':
+                field.widget.attrs['placeholder'] = 'Your email here'
+            elif _ == 'password1':
+                field.widget.attrs['placeholder'] = 'Your password here'
+            elif _ == 'password2':
+                field.widget.attrs['placeholder'] = 'Repeat your password'
+            elif _ == 'first_name':
+                field.widget.attrs['placeholder'] = 'Your first name here'
+
+        return self.response_class(
+            request=self.request,
+            template=self.get_template_names(),
+            context=context,
+            using=self.template_engine,
+            **response_kwargs,
+        )
+
     def form_valid(self, *args, **kwargs):
         result = super().form_valid(*args, **kwargs)
         # user => self.object
         # request => self.request
+        # for _, field in args[0].fields.items():
+        #     if _ == 'email':
+        #         field.widget.attrs['placeholder'] = 'Your email here'
+        #     elif _ == 'password1':
+        #         field.widget.attrs['placeholder'] = 'Your password here'
+        #     elif _ == 'password2':
+        #         field.widget.attrs['placeholder'] = 'Repeat your password'
+        #     elif _ == 'first_name':
+        #         field.widget.attrs['placeholder'] = 'Your first name here'
+
         login(self.request, self.object)
         return result
 
